@@ -2,6 +2,12 @@
 
 NetPulse AI is an AI-driven network monitoring and fault prediction system designed to enhance performance and reliability across industries.
 
+## 👥 Our Team
+
+- **Muhammad Hashir Ehtisham** - Team Leader & Pre-Engineering Student
+- **Aditi Prabhakar** - Software Engineer
+- **Momina Kanwal** - Software Engineer
+
 ## 🚀 Features
 - **AI-Powered Monitoring** – Detects anomalies and predicts faults.
 - **Future Performance Prediction** - Identifies upcoming failure risks based on past data trends.
