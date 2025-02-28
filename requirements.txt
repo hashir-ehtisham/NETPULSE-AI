@@ -1,0 +1,5 @@
+numpy
+pandas
+gradio
+huggingface_hub
+openpyxl
