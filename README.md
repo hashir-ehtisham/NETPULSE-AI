@@ -1,4 +1,3 @@
-# NETPULSE-AI
 ---
 title: NetPulse AI
 emoji: 💬
