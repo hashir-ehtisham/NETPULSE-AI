@@ -1,0 +1,36 @@
+🔧 Requirements to Run VBS Script for Network Health Logging
+1️⃣ Enable Serial Communication
+
+Ensure Raspberry Pi is sending data via serial (UART) to COM port.
+Check the correct COM port number (e.g., COM3).
+2️⃣ Install & Register MSComm32.ocx (For Serial Port Communication)
+
+Download MSComm32.ocx and place it in:
+C:\Windows\System32\ (32-bit Windows)
+C:\Windows\SysWOW64\ (64-bit Windows)
+Register it using Command Prompt (Admin):
+
+regsvr32 C:\Windows\SysWOW64\MSComm32.ocx  (for 64-bit)
+regsvr32 C:\Windows\System32\MSComm32.ocx  (for 32-bit)
+Restart the system after registering.
+3️⃣ Microsoft Excel Installed
+
+The script logs data into an Excel file (network-data.xlsx).
+Ensure Microsoft Excel is installed on your PC.
+4️⃣ VBScript Enabled
+
+Run wscript.exe to check if VBScript is enabled.
+Disable antivirus restrictions on .vbs scripts if needed.
+5️⃣ Correct File Path & Permissions
+
+The script saves data at:
+
+D:\Apps by Hashir\Network Health Prediction\network-data.xlsx
+Ensure the directory exists before running the script and change the directory address according to your path.
+6️⃣ Run the Script
+
+Double-click the .vbs file to execute.
+If using CMD, navigate to the script directory and run:
+cscript script.vbs
+If no COM port is connected, the script may fail or loop indefinitely.
+💡 Tip: If MSComm32 is not working, use PowerShell or Python for serial communication. 🚀
