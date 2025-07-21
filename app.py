@@ -1,17 +1,19 @@
 import gradio as gr
+import os
 from huggingface_hub import InferenceClient
 import pandas as pd
 
 # Direct link to the image
-image_url = "https://drive.google.com/uc?export=view&id=1OX1tj6gTNo8CkV9IDbNKgZ7WHvpNmgFo"
-
+image_url = "https://drive.google.com/uc?export=view&id=1AB7sFKxPLkJE_RmyUDap6fFaDlu1XGJl"
 
 # Define the system message
 system_message = """
-You are a Fault Prediction Chatbot that analyzes network and system performance data to identify potential issues before they escalate. Based on the provided data, respond in the following format and must include the following headings:
-# **Future Performance Prediction**
-# **Risk Analysis and Potential Issues**
-# **Preventive Actions and Recommendations**
+You are a Career Counseling Chatbot. Analyze the student's academic performance and extracurricular activities to provide career guidance. Based on the provided data, respond in the following format and must include the following headings:
+# **Student's Primary Interest with Reason**
+# **Career Opportunities in the field**
+# **Universities in Pakistan for related field**
+# **Conclusion with name of field**
+Ensure that the analysis is based on the student's performance in subjects and extracurriculars, and suggest relevant career options with details on possible high ranking universities in Pakistan.
 """
 
 # CSS to hide footer, customize button, and center image
@@ -94,7 +96,10 @@ footer {display:none !important}
 """
 
 # Initialize the InferenceClient for chatbot
-client = InferenceClient("HuggingFaceH4/zephyr-7b-beta")
+client = InferenceClient(
+    model="microsoft/phi-4",
+    token=os.getenv("HF_TOKEN1")
+)
 
 # Global variable to store chat history for the current session
 current_chat_history = []
@@ -168,11 +173,13 @@ def send_message(message, history, system_message, max_tokens, temperature, top_
             response_text = r
         # Apply HTML formatting to headings
         formatted_response_text = response_text.replace(
-            "Future Performance Prediction:", "<h2><strong>Future Performance Prediction</strong></h2>"
+            "Student's Primary Interest with Reason:", "<h2><strong>Student's Primary Interest with Reason</strong></h2>"
         ).replace(
-            "Risk Analysis and Potential Issues:", "<h2><strong>Risk Analysis and Potential Issues</strong></h2>"
+            "Career Opportunities in the field:", "<h2><strong>Career Opportunities in the field</strong></h2>"
         ).replace(
-            "Preventive Actions and Recommendations:", "<h2><strong>Preventive Actions and Recommendations</strong></h2>"
+            "Universities in Pakistan for related field:", "<h2><strong>Universities in Pakistan for related field</strong></h2>"
+        ).replace(
+            "Conclusion with name of field:", "<h2><strong>Conclusion with name of field</strong></h2>"
         )
         history[-1] = (message, formatted_response_text)
     return history, gr.update(value="")
@@ -185,37 +192,39 @@ def read_excel(file):
 # Create the Gradio interface
 with gr.Blocks(css=css) as demo:
     # Introduction Tab
-    with gr.Tab("NetPulse AI"):
+    with gr.Tab("Career Compass"):
         with gr.Row(elem_id="image-container"):
             gr.Image(image_url, elem_id="compass-image")
         
-        gr.Markdown("# **NetPulse AI**")
-        gr.Markdown("### **Developed by Team HELIX AI**")
+        gr.Markdown("# **Career Compass**")
+        gr.Markdown("### **Developed by Hashir Ehtisham**")
         gr.Markdown("""
-        **This project monitors network health using a Raspberry Pi, collecting data on CPU usage, temperature, signal strength, and packet loss. The data is logged in Excel, identifying abnormal conditions. Users upload the data to a Hugging Face chatbot for predictive analysis and optimization recommendations.**
-        
-        **Features:**
-        - **Future Performance Prediction:** Identifies upcoming failure risks based on past data trends.
-        - **Risk Analysis and Potential Issues:** Detects high-risk periods (e.g., peak CPU load at specific hours). Identifies network bottlenecks, low signal strength, or overheating components.
-        - **Preventive Actions and Recommendations:** Suggests cooling measures if temperature spikes are detected. Recommends bandwidth optimization if packet loss is increasing. Alerts users about critical failures and suggests preventive maintenance.
+        **Career Compass** is a cutting-edge AI-powered tool designed to provide personalized career guidance based on students' academic performance and extracurricular activities. The key features of this tool include:
+        - **Personalized Analysis:** Delivers career advice tailored to individual student profiles.
+        - **Streamlined Interface:** Simple and intuitive user experience.
+        - **Detailed Reports:** Offers insights into suitable career paths, relevant universities, and job opportunities.
+        - **General Guidance & Emotional Support:** Talk to AI for General Career Guidance and also lighten your mood. 
         **Libraries Used:**
         - **Gradio:** For creating the user interface.
         - **Pandas:** For reading and analyzing Excel files.
-        - **Hugging API and LLM:** Zephyr-7b-beta For utilizing state-of-the-art language models.
+        - **Hugging API and LLM:** Microsoft's phi-4 For utilizing state-of-the-art language models.
         
         **How It Works:**
         - **Detailed Analysis**
-        1. Upload your data in form of excel file.
-        2. Paste it in the Detailed Analysis Tab.
-        3. Get detailed recommendations!
-         - **General Chat for Network Optimization**
-        1. Talk to AI for more suggestions and queries regarding Network Issues.
+        1. Upload your academic records.
+        2. Input your query regarding career guidance.
+        3. Get detailed recommendations and potential career paths.
+        4. Download the Report!
+         - **General Guidance & Emotional Support**
+        1. Enter your query and doubts about choosing University majors and Chatbot will guide you about the right choice.
+        2. Ask about Career Opportunities and scope of different fields to get unbaised AI analyzed answer and recommendations and potential career paths!
+        3. IF you ever feel sad, anxious or depressed, talk to Career Compass and it will console you like a friend.
         """)
     
     # Detailed Analysis Tab
     with gr.Tab("Detailed Analysis"):
         gr.Markdown("# Detailed Analysis")
-        gr.Markdown("Analyze network performance trends, predict potential issues, and receive tailored recommendations for optimization based on the uploaded data.</div>")
+        gr.Markdown("Get personalized career guidance based on academic performance and extracurricular activities with Detailed Analysis.\n<div style='color: green;'>Developed by Hashir Ehtisham</div>")
         
         system_message_career = gr.Textbox(value=system_message, visible=False)
         chatbot_career = gr.Chatbot()
@@ -262,18 +271,20 @@ with gr.Blocks(css=css) as demo:
     # File Upload Tab
     with gr.Tab("Upload Data"):
         gr.Markdown("# Upload Data")
+        gr.Markdown("Upload your academic record along with extracurricular activities here and then copy & paste it in Detailed Analysis Tab.\n<div style='color: green;'>Don't worry if your extracted data appears a bit strange. 😉 </div> \n<div style='color: green;'>Developed by Hashir Ehtisham</div>")
         file_input = gr.File(label="Upload Excel file")
         excel_output = gr.Textbox(label="Excel Content")
         file_input.change(read_excel, inputs=file_input, outputs=excel_output)
-    
+
     # Simple Chatbot Tab (new tab integration)
-    with gr.Tab("General Chat for Network Optimization"):
-        gr.Markdown("# General Chat for Network Optimization")
+    with gr.Tab("General Guidance & Emotional Support"):
+        gr.Markdown("# General Guidance & Emotional Support")
         gr.Markdown("""
-        A chatbot that provides predictive maintenance insights, cost optimization suggestions, and energy efficiency recommendations.
+        A compassionate career counseling chatbot providing personalized guidance on career paths and emotional support for your journey.
+        <div style='color: green;'>Developed by Hashir Ehtisham</div>
         """)
 
-        system_message_simple = gr.Textbox(value="You are an AI powered chatbot named as NetPulse-AI built by team HelixAI that provides predictive maintenance insights, cost optimization suggestions, and energy efficiency recommendations for networks.", visible=False)
+        system_message_simple = gr.Textbox(value="You are an AI powered chatbot named as Career Compass built by Hashir Ehtisham who is a student of APS DHA II Sec -D to help students, teachers, and parents find the best career paths based on students' interests and academic performance.", visible=False)
         chatbot_simple = gr.Chatbot()
         msg_simple = gr.Textbox(label="Type a message")
         
