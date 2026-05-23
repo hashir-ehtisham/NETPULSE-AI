@@ -18,7 +18,6 @@ NetPulse AI is an AI-driven network monitoring and fault prediction system desig
 
 ## 📌 Tech Stack
 - **SDK:** Gradio
-- **SDK Version:** 5.0.1
 - **Language:** Python
 - **Application File:** `app.py`
 - **Hardware Requirements:** Raspberry Pi, Sensors
